@@ -4,6 +4,10 @@
 
 A Windows stdio MCP server for creating scenes in MikuMikuDance: character poses, motion, cameras, lighting, physics, timeline editing, MME assignments, and native image/AVI export. It does not require MMDPlugin or replace MMD, MME, or MMAccel DLLs. Operations use native controls and a narrowly scoped bone-selection bridge, without mouse coordinates.
 
+![MMD timeline and controls alongside Hatsune Miku posing on a mint-colored stage](assets/mmd-screenshot.jpg)
+
+A scene created with mmd-mcp, shown in MMD. Model: Tda Hatsune Miku V4X / Tda. Hatsune Miku © Crypton Future Media, INC. [Image credits](assets/CREDITS.md).
+
 ## Supported environment
 
 MMD 9.32 x64, Windows, and Python 3.10 x64. The verified Japanese distribution's built-in **English Mode** is supported alongside Japanese mode. Windows common dialogs follow the OS language independently; live validation currently uses Japanese Windows. English Windows dialog labels are accepted, but that OS configuration has not been tested end to end.

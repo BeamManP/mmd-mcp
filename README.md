@@ -4,6 +4,10 @@
 
 MikuMikuDanceの制作操作とMME設定を扱うWindows用stdio MCPサーバーです。キャラクター・カメラ・照明・物理、タイムライン編集、EMMの編集と実機反映、画像・音声付きAVI出力に対応します。MMDPluginは不要です。MMD本体・MME・MMAccelのDLLを置き換えず、コンピュータユーズやマウス座標操作も使いません。
 
+![MMDのタイムラインと操作パネル、ミント色のステージでピースする初音ミク](assets/mmd-screenshot.jpg)
+
+mmd-mcpで制作したシーンをMMD上に表示。モデル：Tda式初音ミクV4X／Tda。初音ミク © Crypton Future Media, INC. [画像のクレジット](assets/CREDITS.md)。
+
 ## 対応環境
 
 検証環境は日本語配布版 **MMD 9.32 x64、日本語Windows、Python 3.10 x64** です。同じ実行ファイルの日本語モードと内蔵の **English Mode** に対応します。英語OS上の通し検証は未実施です。
