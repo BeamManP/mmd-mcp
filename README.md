@@ -186,27 +186,9 @@ VPDはキー登録を伴わないポーズ読み込みです。MMDが数値欄�
 - ライブのモデル照合はボーン名と順序によるものです。UIからロード元ファイルのハッシュは証明できないため、指定したモデルファイルと実際の対象を利用者が対応させてください。
 - プロファイルのPMX読み取りはボーン節までです。モデル全体の整合性や物理設定を検証するパーサーではありません。
 
-## 検証・配布ビルド
+## 開発者向け
 
-```powershell
-.\.venv\Scripts\python.exe -m unittest discover -s tests -v
-.\.venv\Scripts\python.exe scripts/smoke_mcp.py
-.\.venv\Scripts\python.exe scripts/build_package.py
-```
-
-総合実機検証はスクリプト自身が別MMDを起動して編集・終了します。既存のMMDは操作しません。
-
-```powershell
-.\.venv\Scripts\python.exe scripts/smoke_scene.py --apply --mmd-exe "C:/MMD/MikuMikuDance.exe" --model "C:/MMD/UserFile/Model/初音ミク.pmd"
-```
-
-テストには「左腕」と「まばたき」を持つ初音ミクを利用します。モデルは同梱しません。検証用PMM・PNG・JSONは `local/scene-smoke-*` に保存されます。
-
-追加の総合テストは `scripts/smoke_release.py --apply --mmd-exe ... --model ... --second-model ...`、RayMMDの割当往復は `scripts/smoke_ray.py --apply --mmd-exe ... --model ... --ray-dir ...` です。
-
-[対応機能](docs/coverage.md) / [制作手順](docs/authoring.md) / [編集・出力](docs/native-editing.md) / [MME割当](docs/effects.md)
-
-MMD本体、モデル、利用者の画像・モーション・PMMは配布物に含めません。ソースの配布先は [BeamManP/mmd-mcp](https://github.com/BeamManP/mmd-mcp) です。
+[検証・配布ビルドの手順](docs/development.md)
 
 ## UI言語とモデル内の名前
 

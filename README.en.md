@@ -141,11 +141,9 @@ EMM read/write tools edit files. Use `mmd_transfer_effect_assignments` to export
 
 The optional Japanese [authoring skill](skills/mmd-pose-motion/SKILL.md) can be installed in the skill location supported by your MCP client (such as Codex or Claude Code). The pose compiler targets supported model conventions; arbitrary rigs are not automatically retargeted.
 
-## Validation and publication
+## For contributors
 
-Run `python scripts/smoke_mcp.py` from the installed environment to check the MCP connection and tool discovery. Live smoke scripts create and terminate their own MMD process and keep artifacts under `local/`. Use `--english` with `scripts/smoke_scene.py`, `scripts/smoke_release.py`, and `scripts/smoke_editing.py` to exercise English Mode.
-
-Source is distributed at [BeamManP/mmd-mcp](https://github.com/BeamManP/mmd-mcp). No MMD or third-party model distribution rights are implied.
+[Testing and package-building guide](docs/development.md#english-notes)
 
 ## Language and names
 
