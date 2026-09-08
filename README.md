@@ -2,7 +2,7 @@
 
 日本語 | [English](README.en.md)
 
-MikuMikuDanceの制作操作とMME設定を扱うWindows用stdio MCPサーバーです。キャラクター・カメラ・照明・物理、タイムライン編集、EMMの編集と実機反映、画像・音声付きAVI出力に対応します。MMD本体・MME・MMAccelのDLLを置き換えず、コンピュータユーズやマウス座標操作も使いません。
+MikuMikuDanceの制作操作とMME設定を扱うWindows用stdio MCPサーバーです。キャラクター・カメラ・照明・物理、タイムライン編集、EMMの編集と実機反映、画像・音声付きAVI出力に対応します。
 
 ![MMDのタイムラインと操作パネル、ミント色のステージでピースする初音ミク](assets/mmd-screenshot.jpg)
 

@@ -2,7 +2,7 @@
 
 [日本語](README.md) | English
 
-A Windows stdio MCP server for creating scenes in MikuMikuDance: character poses, motion, cameras, lighting, physics, timeline editing, MME assignments, and native image/AVI export. It does not replace MMD, MME, or MMAccel DLLs. Operations use native controls and a narrowly scoped bone-selection bridge, without mouse coordinates.
+A Windows stdio MCP server for creating scenes in MikuMikuDance: character poses, motion, cameras, lighting, physics, timeline editing, MME assignments, and native image/AVI export.
 
 ![MMD timeline and controls alongside Hatsune Miku posing on a mint-colored stage](assets/mmd-screenshot.jpg)
 
