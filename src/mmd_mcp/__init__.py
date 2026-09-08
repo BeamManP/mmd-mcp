@@ -1,0 +1,1 @@
+"""External MikuMikuDance MCP bridge."""

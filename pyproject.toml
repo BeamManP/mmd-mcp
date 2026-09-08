@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mmd-mcp"
+version = "0.3.0"
+description = "An experimental external MCP bridge for MikuMikuDance on Windows"
+readme = "README.md"
+license = "MIT-0 AND LicenseRef-Microsoft-Runtime"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md"]
+requires-python = ">=3.10"
+dependencies = ["mcp>=1.12,<2", "windows-capture==2.0.1", "psutil>=6,<8", "pywin32>=310", "opencv-python>=4,<6"]
+
+[project.scripts]
+mmd-mcp = "mmd_mcp.server:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+mmd_mcp = ["_native/*.dll"]

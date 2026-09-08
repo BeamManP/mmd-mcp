@@ -1,0 +1,4 @@
+interface:
+  display_name: "MMDポーズ・モーション制作"
+  short_description: "モデルの骨格に合わせたポーズ・表情・モーションとアクセサリを制作"
+  default_prompt: "$mmd-pose-motion を使って、MMDで自然なポーズと短いモーションを制作してください。"
