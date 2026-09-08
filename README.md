@@ -2,7 +2,7 @@
 
 日本語 | [English](README.en.md)
 
-MikuMikuDanceの制作操作とMME設定を扱うWindows用stdio MCPサーバーです。キャラクター・カメラ・照明・物理、タイムライン編集、EMMの編集と実機反映、画像・音声付きAVI出力に対応します。MMDPluginは不要です。MMD本体・MME・MMAccelのDLLを置き換えず、コンピュータユーズやマウス座標操作も使いません。
+MikuMikuDanceの制作操作とMME設定を扱うWindows用stdio MCPサーバーです。キャラクター・カメラ・照明・物理、タイムライン編集、EMMの編集と実機反映、画像・音声付きAVI出力に対応します。MMD本体・MME・MMAccelのDLLを置き換えず、コンピュータユーズやマウス座標操作も使いません。
 
 ![MMDのタイムラインと操作パネル、ミント色のステージでピースする初音ミク](assets/mmd-screenshot.jpg)
 
@@ -21,14 +21,6 @@ mmd-mcpで制作したシーンをMMD上に表示。モデル：Tda式初音ミ�
 ```
 
 ボーン選択には自作の小さなDLLをMMDのUIスレッドへ一時的に読み込み、MMD自身の選択処理を呼びます。処理後にフックを解除します。これは保証された公開APIではなく、検証した実行ファイルの内部構造に依存する方式です。未対応ビルドは拒否します。
-
-## UI言語とモデル内の名前
-
-English Modeでは、モデルに英語名があると表示名も変わります。`mmd_list_bones` は内部の元名 `name` と現在の表示名 `display_name` を返し、`mmd_select_bone` はどちらでも一意なら選択できます。ボーンバッチと意味ポーズはUI言語に関係なく元名を使います（付属ミクなら表示 `arm_L`、元名 `左腕`）。表情・IK・親ボーン・タイムラインは現在のUI一覧の名前を指定してください。VMDの名前は元名のままです。
-
-言語を切り替えたら一覧を再取得し、呼び出し中は切り替えないでください。Windows標準ダイアログはMMDとは独立してOSの言語に従います。詳しい導入と使用例は[英語README](README.en.md)にもあります。
-
-**中国語版は未対応です。** 対応を追加する場合は、まず [ui_language.py](src/mmd_mcp/ui_language.py) のラベルとモード判定、[file_operations.py](src/mmd_mcp/file_operations.py) のファイルダイアログ、`scene_lifecycle.py`・`accessory_controls.py`・`edit_actions.py` の確認本文を確認してください。改変EXEでは [bone_state.py](src/mmd_mcp/bone_state.py) と [selection_bridge.cpp](native/selection_bridge.cpp) の文字コード・内部配置・呼出先も再検証が必要です。ハッシュを書き換えるだけでは対応できません。検証は `scripts/smoke_scene.py`・`smoke_release.py`・`smoke_editing.py` を入口にできます。
 
 ## 導入
 
@@ -215,6 +207,14 @@ VPDはキー登録を伴わないポーズ読み込みです。MMDが数値欄�
 [対応機能](docs/coverage.md) / [制作手順](docs/authoring.md) / [編集・出力](docs/native-editing.md) / [MME割当](docs/effects.md)
 
 MMD本体、モデル、利用者の画像・モーション・PMMは配布物に含めません。ソースの配布先は [BeamManP/mmd-mcp](https://github.com/BeamManP/mmd-mcp) です。
+
+## UI言語とモデル内の名前
+
+English Modeでは、モデルに英語名があると表示名も変わります。`mmd_list_bones` は内部の元名 `name` と現在の表示名 `display_name` を返し、`mmd_select_bone` はどちらでも一意なら選択できます。ボーンバッチと意味ポーズはUI言語に関係なく元名を使います（付属ミクなら表示 `arm_L`、元名 `左腕`）。表情・IK・親ボーン・タイムラインは現在のUI一覧の名前を指定してください。VMDの名前は元名のままです。
+
+言語を切り替えたら一覧を再取得し、呼び出し中は切り替えないでください。Windows標準ダイアログはMMDとは独立してOSの言語に従います。詳しい導入と使用例は[英語README](README.en.md)にもあります。
+
+**中国語版は未対応です。** 対応を追加する場合は、まず [ui_language.py](src/mmd_mcp/ui_language.py) のラベルとモード判定、[file_operations.py](src/mmd_mcp/file_operations.py) のファイルダイアログ、`scene_lifecycle.py`・`accessory_controls.py`・`edit_actions.py` の確認本文を確認してください。改変EXEでは [bone_state.py](src/mmd_mcp/bone_state.py) と [selection_bridge.cpp](native/selection_bridge.cpp) の文字コード・内部配置・呼出先も再検証が必要です。ハッシュを書き換えるだけでは対応できません。検証は `scripts/smoke_scene.py`・`smoke_release.py`・`smoke_editing.py` を入口にできます。
 
 ## ライセンス
 

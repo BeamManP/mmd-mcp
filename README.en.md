@@ -2,7 +2,7 @@
 
 [日本語](README.md) | English
 
-A Windows stdio MCP server for creating scenes in MikuMikuDance: character poses, motion, cameras, lighting, physics, timeline editing, MME assignments, and native image/AVI export. It does not require MMDPlugin or replace MMD, MME, or MMAccel DLLs. Operations use native controls and a narrowly scoped bone-selection bridge, without mouse coordinates.
+A Windows stdio MCP server for creating scenes in MikuMikuDance: character poses, motion, cameras, lighting, physics, timeline editing, MME assignments, and native image/AVI export. It does not replace MMD, MME, or MMAccel DLLs. Operations use native controls and a narrowly scoped bone-selection bridge, without mouse coordinates.
 
 ![MMD timeline and controls alongside Hatsune Miku posing on a mint-colored stage](assets/mmd-screenshot.jpg)
 
@@ -56,17 +56,6 @@ Register the server in your MCP client, replacing the installation path:
 For an MMD instance that should survive shutdown of its MCP client (such as Codex or Claude Code), run `python -m mmd_mcp.launcher "C:/MMD/MikuMikuDance.exe"` using the Python environment where mmd-mcp is installed. The local Windows WMI broker creates a suspended process; the launcher verifies that it belongs to no Windows job before resuming it. There is no ordinary child-process fallback on failure. Match the returned PID with `mmd_list_windows`. This isolates process lifetime; it does not prevent MMD crashes or Windows shutdown.
 
 Start MMD yourself before use. The server does not start MMD or listen on a network port. When multiple MMD instances are running, obtain their handles with `mmd_list_windows` and pass the intended `hwnd` to each call. Reconnect the MCP client after updating the server.
-
-## Language and names
-
-MMD's menu language and a model's original names are separate. Changing English Mode can also change the displayed model, bone, morph, and timeline labels.
-
-- Read model names from `mmd_list_models` and UI labels from `mmd_get_ui_state` / `mmd_get_timeline_context`.
-- `mmd_list_bones` returns the original runtime `name` and the current `display_name`. `mmd_select_bone` accepts either when unambiguous, or `bone_index`.
-- Bone batches and semantic pose authoring use original bone names, regardless of UI language. For example, the bundled Miku's `arm_L` display corresponds to the original `左腕`.
-- Morph names, IK names, parent-bone choices, and timeline track names must match their current UI lists. Do not assume every model supplies the same English translations.
-- VMD names remain the original names. Switching the UI language does not translate motion files.
-- Do not switch languages, selection, frame, or fields while a call is running. Unknown dialog translations remain open for inspection.
 
 ## Tools and workflow
 
@@ -157,6 +146,17 @@ The optional Japanese [authoring skill](skills/mmd-pose-motion/SKILL.md) can be 
 Run `python scripts/smoke_mcp.py` from the installed environment to check the MCP connection and tool discovery. Live smoke scripts create and terminate their own MMD process and keep artifacts under `local/`. Use `--english` with `scripts/smoke_scene.py`, `scripts/smoke_release.py`, and `scripts/smoke_editing.py` to exercise English Mode.
 
 Source is distributed at [BeamManP/mmd-mcp](https://github.com/BeamManP/mmd-mcp). No MMD or third-party model distribution rights are implied.
+
+## Language and names
+
+MMD's menu language and a model's original names are separate. Changing English Mode can also change the displayed model, bone, morph, and timeline labels.
+
+- Read model names from `mmd_list_models` and UI labels from `mmd_get_ui_state` / `mmd_get_timeline_context`.
+- `mmd_list_bones` returns the original runtime `name` and the current `display_name`. `mmd_select_bone` accepts either when unambiguous, or `bone_index`.
+- Bone batches and semantic pose authoring use original bone names, regardless of UI language. For example, the bundled Miku's `arm_L` display corresponds to the original `左腕`.
+- Morph names, IK names, parent-bone choices, and timeline track names must match their current UI lists. Do not assume every model supplies the same English translations.
+- VMD names remain the original names. Switching the UI language does not translate motion files.
+- Do not switch languages, selection, frame, or fields while a call is running. Unknown dialog translations remain open for inspection.
 
 ## License
 
