@@ -6,7 +6,11 @@ MikuMikuDanceの制作操作とMME設定を扱うWindows用stdio MCPサーバー
 
 ## 対応環境
 
-検証環境は日本語配布版 **MMD 9.32 x64、日本語Windows、Python 3.10 x64** です。同じ実行ファイルの日本語モードと内蔵の **English Mode** に対応します。英語OS上の通し検証は未実施です。ボーン情報と名前指定による選択は、次のSHA-256のMMD実行ファイルに限定します。
+検証環境は日本語配布版 **MMD 9.32 x64、日本語Windows、Python 3.10 x64** です。同じ実行ファイルの日本語モードと内蔵の **English Mode** に対応します。英語OS上の通し検証は未実施です。
+
+## ボーン選択DLLの仕組み
+
+ボーン情報と名前指定による選択は、次のSHA-256のMMD実行ファイルに限定します。
 
 ```text
 07516fd3bf1e6b1339836b6773a156f61bdd6f848eeb621fdda012375df313a1
@@ -14,7 +18,7 @@ MikuMikuDanceの制作操作とMME設定を扱うWindows用stdio MCPサーバー
 
 ボーン選択には自作の小さなDLLをMMDのUIスレッドへ一時的に読み込み、MMD自身の選択処理を呼びます。処理後にフックを解除します。これは保証された公開APIではなく、検証した実行ファイルの内部構造に依存する方式です。未対応ビルドは拒否します。
 
-### UI言語とモデル内の名前
+## UI言語とモデル内の名前
 
 English Modeでは、モデルに英語名があると表示名も変わります。`mmd_list_bones` は内部の元名 `name` と現在の表示名 `display_name` を返し、`mmd_select_bone` はどちらでも一意なら選択できます。ボーンバッチと意味ポーズはUI言語に関係なく元名を使います（付属ミクなら表示 `arm_L`、元名 `左腕`）。表情・IK・親ボーン・タイムラインは現在のUI一覧の名前を指定してください。VMDの名前は元名のままです。
 
@@ -53,13 +57,13 @@ MCPクライアントにstdioサーバーとして登録します。以下のパ
 }
 ```
 
-Codexから制作用MMDを起動する場合は、インストール先のPythonで次を使えます。
+MCPクライアント（Codex・Claude Code 等）から制作用MMDを起動する場合は、インストール先のPythonで次を使えます。
 
 ```powershell
 python -m mmd_mcp.launcher "C:/MMD/MikuMikuDance.exe"
 ```
 
-WindowsのローカルWMI経由でCodexと独立したプロセスを作り、ジョブ非所属を確認してからMMDを実行します。起動に失敗した場合、通常の子プロセスとして再起動はしません。戻り値のPIDを `mmd_list_windows` と照合してください。Codexの終了に伴う巻き込みを防ぐための経路で、MMD自身のクラッシュやWindows終了を防ぐものではありません。
+WindowsのローカルWMI経由で起動元のMCPクライアントと独立したプロセスを作り、ジョブ非所属を確認してからMMDを実行します。起動に失敗した場合、通常の子プロセスとして再起動はしません。戻り値のPIDを `mmd_list_windows` と照合してください。起動元のMCPクライアントの終了に伴う巻き込みを防ぐための経路で、MMD自身のクラッシュやWindows終了を防ぐものではありません。
 
 通常利用ではMMDを先に起動します。サーバーはMMDの自動起動やネットワーク待受を行いません。複数起動時は `mmd_list_windows` の `hwnd` を各呼び出しへ渡します。
 
@@ -91,7 +95,6 @@ v0.3.0の公開MCPツールは50個です。ボーン・表情・カメラ・ア
 | `mmd_batch_bone_keys` | アクティブモデルのボーン・表情をフレーム別に一括設定・キー登録（意味ポーズ／明示ボーン値／表情を混在可。1フレーム1ボーンなら単発編集） |
 | `mmd_batch_camera_keys` | カメラ・ライト・セルフ影・重力をフレーム別に一括設定・キー登録 |
 | `mmd_read_effect_assignments` / `mmd_write_effect_assignments` | MMEのEMMをMain・環境光・材質・影等のセクション別に読み取り／一括編集。材質単位と表示切替にも対応 |
-| （共通） | ボーン選択を伴う操作は、パネルがBOX選択などのモードなら自分で「選択」へ戻す（`operation_mode_switched_from`） |
 | `mmd_batch_model_flags` | 表示・IK・外親パネルをフレーム別に一括（表示／セルフ影／加算、IKのON/OFF、外部親、登録） |
 | `mmd_batch_accessories` | アクセサリの読み込み・フレーム別の値／親設定・キー登録を1回で実行（1個でも複数でも同じ） |
 | `mmd_delete_accessories` | 複数アクセサリを降順で一括削除。MMDの確認ダイアログを文言完全一致でのみ受諾 |
@@ -109,6 +112,8 @@ v0.3.0の公開MCPツールは50個です。ボーン・表情・カメラ・ア
 | `mmd_inspect_vmd` / `mmd_edit_vmd` | VMDのキーを読み、時刻・削除・ボーン／カメラ補間を新規ファイルへ編集 |
 | `mmd_transfer_effect_assignments` | MME設定をEMMへ保存／EMMから読込。PMM再読込は不要 |
 | `mmd_delete_models` / `mmd_new_project` | 明示したモデルの削除、現在シーンを破棄して新規作成 |
+
+共通の動作：ボーン選択を伴う操作は、パネルがBOX選択などのモードなら自動で「選択」へ戻します。変更前のモードは `operation_mode_switched_from` に返します。
 
 ## 操作例
 
@@ -141,6 +146,8 @@ VPDはキー登録を伴わないポーズ読み込みです。MMDが数値欄�
 
 ## ポーズ・モーション制作
 
+`mmd_get_model_profile` はPMD/PMXの読み取り専用調査にも対応します。`bone_name` または `bone_index` で親階層・軸・付与・IKを調べ、宣言値と初期配置からの推定を区別します。詳細は [制作経路](docs/authoring.md) を参照。
+
 基本検証モデルは **Tda式初音ミクV4X Ver1.00** です。モデルファイルは利用者が用意します。意味ベースの操作はファイルのSHA-256により対応を限定し、Tda V4X、同梱のあにまさ式ミク1.3、MEIKOで確認しています。PMD/PMXの骨格情報を読むことと、任意のモデルで自然なポーズを作れることは別です。
 
 `mmd_compile_pose` は肩上げ、腕上げ、肘曲げ、前腕方向のひねり、手のジェスチャーなどから名前付きボーンキーを生成します。実機への適用は `mmd_batch_bone_keys` に `model_path` とフレームごとの `pose` を渡します。明示的な `bones` と `morphs` も同時に指定できます。キー登録は各項目の `register_key`（既定true）で制御し、登録せず試す場合はfalseにします。VPD/VMD読み込み・PMM保存は別操作です。Tdaでは手捩り・上半身2・親指0も扱います。モデル本体の改造はしません。
@@ -151,11 +158,11 @@ VPDはキー登録を伴わないポーズ読み込みです。MMDが数値欄�
 
 `mmd_preview_motion` は指定区間を最大180サンプルにしてPNG、コマ一覧、MJPG AVIを生成します。`allow_frame_evaluation=true` が必要です。成功時は元フレームへ戻りますが、未登録の編集は復元しません。これはフレーム評価によるプレビューで、リアルタイム録画や物理ベイクではありません。
 
-専用スキルは [skills/mmd-pose-motion](skills/mmd-pose-motion/SKILL.md) にあります。Codexのスキルフォルダへ配置すると、ポーズ・モーション・アクセサリ制作時に利用できます。MCPサーバーを更新した後は、クライアント側でMCPを再接続して新しいツール一覧を読み込んでください。
+専用スキルは [skills/mmd-pose-motion](skills/mmd-pose-motion/SKILL.md) にあります。MCPクライアント（Codex・Claude Code 等）が対応するスキル配置先へ置くと、ポーズ・モーション・アクセサリ制作時に利用できます。MCPサーバーを更新した後は、クライアント側でMCPを再接続して新しいツール一覧を読み込んでください。
 
 ## アクセサリ
 
-インデックス0のカメラ・照明・アクセサリモードで扱います。読むのは `mmd_list_accessories` → `mmd_select_accessory` → `mmd_get_accessory`。書くのは1個でも複数でも `mmd_batch_accessories` です（v0.2.2で単発の設定・親変更・登録・削除ツールは廃止し、複数版に一本化しました）。
+インデックス0のカメラ・照明・アクセサリモードで扱います。読むのは `mmd_list_accessories` → `mmd_select_accessory` → `mmd_get_accessory`。書くのは1個でも複数でも `mmd_batch_accessories` です。
 
 親モデルのインデックスは `mmd_get_accessory` の親選択欄から取得します。0は地面で、モデルへ取り付ける場合はボーン名も指定します。親の変更はローカル変換を保持するため、ワールド位置が変わります。親はキーの `parent_model_index` / `parent_bone_name` で指定し、数値より先に適用されます。
 
@@ -214,5 +221,3 @@ MMD本体、モデル、利用者の画像・モーション・PMMは配布物�
 ## 変更履歴
 
 機能追加と変更点は [CHANGELOG](CHANGELOG.md) を参照してください。
-
-`mmd_get_model_profile` はPMD/PMXの読み取り専用調査にも対応します。`bone_name` または `bone_index` で親階層・軸・付与・IKを調べ、宣言値と初期配置からの推定を区別します。詳細は [制作経路](docs/authoring.md) を参照。
